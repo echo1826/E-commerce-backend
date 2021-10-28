@@ -16,13 +16,13 @@ router.get('/', async (req, res) => {
     const productData = await Product.findAll({
       include: [{
         model: Category,
-        required: true
+        // required: true
         
       },
     {
       model: Tag,
       // through: ProductTag, as: 'Product_tag' ,
-      required: true
+      // required: true
     }
     ]
     });
@@ -41,15 +41,19 @@ router.get('/:id', async (req, res) => {
       include: [
         {
           model: Category,
-          required: true
+          // required: true
         },
         {
           model: Tag,
-          required: true,
+          // required: true,
           // through: ProductTag, as: 'Product_tag'
         }
       ]
-    })
+    });
+    if(!productData) {
+      res.status(404).json({message: "No product found with this id!"});
+    }
+    res.status(200).json(productData);
   }catch(error) {
     res.status(500).json(error);
   }
@@ -145,6 +149,19 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   // delete one product by its `id` value
+  try {
+    const deletedProduct = await Product.destroy({
+      where: {
+        id: req.params.id
+      }
+    });
+    if(!deletedProduct) {
+      res.status(404).json({message: "No product found with this id!"})
+    }
+    res.status(200).json(deletedProduct);
+  } catch(error) {
+    res.status(500).json(error);
+  }
 });
 
 module.exports = router;
