@@ -16,6 +16,9 @@ router.get('/', async (req, res) => {
         // required: true
       }]
     });
+    if(!categoryData) {
+      res.status(404).json({message: "Categories cannot be found!"});
+    }
     res.status(200).json(categoryData);
   } catch (err) {
     res.status(500).json(err);
@@ -32,6 +35,9 @@ router.get('/:id', async (req, res) => {
         // required: true
       }]
     });
+    if(!categoryData) {
+      res.status(404).json({message: "Category with that id cannot be found!"});
+    }
     res.status(200).json(categoryData);
   } catch (error) {
     res.status(500).json(error);
@@ -59,6 +65,9 @@ router.put('/:id', async (req, res) => {
         id: req.params.id
       }
     });
+    if(!updatedCategory[0]) {
+      res.status(404).json({message:"The category with that id cannot be found!"});
+    }
     res.status(200).json(updatedCategory);
   } catch (error) {
     res.status(500).json(error);
@@ -75,6 +84,9 @@ router.delete('/:id', async (req, res) => {
         }
       }
     );
+    if(!deletedCategory) {
+      res.status(404).json({message: "Category with that id cannot be found!"});
+    }
     res.status(200).json(deletedCategory);
   }catch{
     res.status(500).json(error);
